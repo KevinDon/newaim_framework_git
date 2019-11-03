@@ -1,0 +1,65 @@
+<div>
+  <el-container class="core-grid">
+    <el-header>
+      Tool Bar
+      <el-button-group v-for="[tbsIndex,tbs] in gridToolbarConf.entries()" v-bind:key="tbsIndex"  style="margin-left: 18px">
+        <template v-for="[tbIndex,tb] in Object.values(toolbarSort(tbs)).entries()"  >
+          <el-tooltip :content="tb.title || tb.name">
+            <el-button @click="tb.event.click" type="primary" size="mini" :icon="tb.icon"
+                       :loading="gridLoading || false"></el-button>
+          </el-tooltip>
+        </template>
+      </el-button-group>
+      <slot name="gridToolBar"></slot>
+    </el-header>
+    <el-main>
+    <transition name="fade" mode="out-in" appear>
+      <el-table
+        class="innerbox"
+        :data="gridData"
+        @sort-change="handleGridSortChange"
+        border
+        style="width: 100%"
+        :height="gridConf.height || 680"
+      >
+        <template v-for="(_column, _index) in gridConf.columns" :index="_index">
+          <el-table-column
+            :index="_index"
+            :key="_index"
+            :prop="_column.field"
+            :label="_column.title"
+            :sortable="_column.sort"
+            width="!!_column.width ? _column.width : '180px'"
+          >
+            <template slot-scope="scope">
+              {{_column.renderer ? _column.renderer(scope.row[_column.field]) : scope.row[_column.field] }}
+            </template>
+          </el-table-column>
+        </template>
+        <template v-if=gridConf.editable>
+          <el-table-column
+            border
+            prop="edit"
+            label="Edit"
+            width="80px">
+            <template slot-scope="scope">
+              <el-button @click="handleClick(scope.$index, scope.row)" size="mini">Edit</el-button>
+            </template>
+          </el-table-column>
+        </template>
+      </el-table>
+</transition>
+    </el-main>
+    <el-footer>
+      <el-pagination
+        @size-change="handlePageSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="gridConf.curPage"
+        :page-sizes="[25, 50, 100, 500]"
+        :page-size="gridConf.pageSize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="gridConf.totalRow">
+      </el-pagination>
+    </el-footer>
+  </el-container>
+</div>

@@ -1,0 +1,9 @@
+<div class="core-drawer">
+  <el-drawer
+    title="我是标题"
+    :visible.sync="state.isShow||false"
+    :direction="'rtl'"
+    :before-close="handleClose">
+    <slot name="drawerMain"></slot>
+  </el-drawer>
+</div>

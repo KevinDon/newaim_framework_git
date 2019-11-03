@@ -1,0 +1,15 @@
+query {
+  user
+}
+
+type User{
+  _id:String
+  id:String
+  username:String
+  password:String
+  date_joined:String
+}
+
+type Query{
+  getRandomUser:User
+}
