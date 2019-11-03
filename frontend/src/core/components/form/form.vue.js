@@ -1,13 +1,16 @@
 export default {
-  name: "grid.vue",
+  name: "form.vue",
   components: {
-
+    textfield: () => import('@/core/components/form/widget/textfield.vue'),
   },
   props: {
     formData: {
-      type: Array,
+
     },
     formConf:{
+
+    },
+    formField:{
 
     }
   },
@@ -24,7 +27,4 @@ export default {
 
     }
   },
-  computed: {
-
-  }
 }
