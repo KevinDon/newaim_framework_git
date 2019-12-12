@@ -6,13 +6,13 @@
 
 <script>
 export default {
-  name: 'ProductUpdate',
-  data () {
-    return {
-      msg: ''
+    name: 'ProductUpdate',
+    data () {
+        return {
+            msg: ''
+        };
     }
-  }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

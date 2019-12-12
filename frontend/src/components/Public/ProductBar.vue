@@ -33,23 +33,25 @@
 
 <script>
 export default {
-  name: 'ProductBar',
-  created () {},
-  methods: {
-    showMsg: function () {
-      console.log(this)
+    name: 'ProductBar',
+    created () {},
+    methods: {
+        showMsg: function () {
+            console.log(this);
+        },
+        loadCurrentProduct: function () {
+            this.$emit('loadProduct', this.product_id);
+        }
     },
-    loadCurrentProduct: function () {
-      this.$emit('loadProduct', this.product_id)
+    props: [
+        'sku', 'sh_title', 'sh_price', 'dsz_price', 'small_image', 'product_id'
+    ],
+    data () {
+        return {
+            msg: ''
+        };
     }
-  },
-  props: ['sku', 'sh_title', 'sh_price', 'dsz_price', 'small_image', 'product_id'],
-  data () {
-    return {
-      msg: ''
-    }
-  }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

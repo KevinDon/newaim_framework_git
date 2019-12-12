@@ -1,11 +1,13 @@
 <template>
+  <div>
 
+  </div>
 </template>
 
 <script>
-  export default {
+export default {
     name: 'grid'
-  }
+};
 </script>
 
 <style scoped>

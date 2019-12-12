@@ -24,36 +24,37 @@
 
 <script>
 export default {
-  components: {
-    TopNav: () => import("./dashboard/topNav.vue"),
-    LeftNav: () => import("./dashboard/leftNav.vue")
-  },
-  data() {
-    return {
-      leftNavCollapse: false,
-      fullscreenLoading: false
-    };
-  },
-  mounted() {
-    let vm = this;
-    // Listen global loading event
-    vm.$launcher.$on("globalLoading", function(payload) {
-      console.debug("Global Loading Active", payload);
-      vm.fullscreenLoading = payload;
-    });
-  },
-  computed: {
-    leftWidth: {
-      get() {
-        return this.leftNavCollapse ? "64" : "200";
-      }
+    components: {
+        TopNav: () => import('./dashboard/topNav.vue'),
+        LeftNav: () => import('./dashboard/leftNav.vue')
     },
-    mainWidth: {
-      get() {
-        return document.body.clientWidth - this.leftWidth;
-      }
+    data() {
+        return {
+            leftNavCollapse: false,
+            fullscreenLoading: false
+        };
+    },
+    mounted() {
+        let me = this;
+        // Listen global loading event
+
+        me.$launcher.$on('globalLoading', function(payload) {
+            me.$logger.debug('Global Loading Active', payload);
+            me.fullscreenLoading = payload;
+        });
+    },
+    computed: {
+        leftWidth: {
+            get() {
+                return this.leftNavCollapse ? '64' : '200';
+            }
+        },
+        mainWidth: {
+            get() {
+                return document.body.clientWidth - this.leftWidth;
+            }
+        }
     }
-  }
 };
 </script>
 

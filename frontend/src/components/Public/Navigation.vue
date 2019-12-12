@@ -68,22 +68,22 @@
 
 <script>
 export default {
-  name: 'Navigation',
-  data () {
-    return {
-      msg: '',
-      path: this.$route.path,
-      opened: ['/ProductUpdate', '/FreightService', '/Notice']
-    }
-  },
-  created: function () {
+    name: 'Navigation',
+    data () {
+        return {
+            msg: '',
+            path: this.$route.path,
+            opened: ['/ProductUpdate', '/FreightService', '/Notice']
+        };
+    },
+    created: function () {
     // console.log(this.$router.path)
-  },
-  methods: {
+    },
+    methods: {
 
-  }
+    }
 
-}
+};
 </script>
 
 <style scoped>

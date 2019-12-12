@@ -1,10 +1,10 @@
 const state = {
-  testChart: 'Accounts'
-}
-const getter = {}
-const mutation = {}
-const action = {}
+    testChart: 'Accounts'
+};
+const getters = {};
+const mutations = {};
+const actions = {};
 
-export {
-  state, getter, mutation, action
-}
+export default {
+    state, getters, mutations, actions
+};

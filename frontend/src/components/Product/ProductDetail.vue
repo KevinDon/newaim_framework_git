@@ -52,30 +52,32 @@
 
 <script>
 export default {
-  name: 'ProductDetail',
-  props: ['sku', 'gallery', 'sh_price', 'dsz_price', 'qty'],
-  methods: {
-    hideContainer: function () {
-      console.log(this)
+    name: 'ProductDetail',
+    props: [
+        'sku', 'gallery', 'sh_price', 'dsz_price', 'qty'
+    ],
+    methods: {
+        hideContainer: function () {
+            console.log(this);
+        },
+        overwrite: function () {
+            this.$emit('showDeleteDialog');
+        },
+        deletep: function () {
+            this.$emit('showDeleteDialog');
+        }
     },
-    overwrite: function () {
-      this.$emit('showDeleteDialog')
-    },
-    deletep: function () {
-      this.$emit('showDeleteDialog')
-    }
-  },
-  data () {
-    return {
-      msg: '123',
-      pcmsg: 'Product Cost - amount you will pay to supplier.',
-      spmsg: 'Shopify Price - product selling price paid by your',
-      aliablenum: 0,
-      updatemsg: 'Automatically update price when cost changes Manage auto update settings (disabled)'
+    data () {
+        return {
+            msg: '123',
+            pcmsg: 'Product Cost - amount you will pay to supplier.',
+            spmsg: 'Shopify Price - product selling price paid by your',
+            aliablenum: 0,
+            updatemsg: 'Automatically update price when cost changes Manage auto update settings (disabled)'
 
+        };
     }
-  }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

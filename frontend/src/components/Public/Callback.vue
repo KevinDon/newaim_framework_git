@@ -6,25 +6,25 @@
 </template>
 
 <script>
-  export default {
+export default {
     name: 'Callback',
     created: function () {
-      let url = this.HOME + '/auth/callback'
-      let pageParams = this.$route.query
+        let url = this.HOME + '/auth/callback';
+        let pageParams = this.$route.query;
 
-      this.$http.get(url, {params: pageParams}).then(function (response) {
-        console.log(response)
-        if (response) {
-          window.open(response.data.url)
-        }
-      })
+        this.$http.get(url, { params: pageParams }).then(function (response) {
+            console.log(response);
+            if (response) {
+                window.open(response.data.url);
+            }
+        });
     },
     data () {
-      return {
-        msg: ''
-      }
+        return {
+            msg: ''
+        };
     }
-  }
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

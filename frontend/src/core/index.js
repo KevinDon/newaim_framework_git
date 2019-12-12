@@ -1,7 +1,7 @@
-import VueLauncher from './libs/vueLauncher'
+import VueLauncher from './libs/vueLauncher';
 
 export default {
-  install (Vue, options) {
-    Vue.prototype.$launcher = new VueLauncher(Vue, options)
-  }
-}
+    install (Vue, options) {
+        Vue.prototype.$launcher = new VueLauncher(Vue, options);
+    }
+};

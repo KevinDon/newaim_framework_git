@@ -5,14 +5,14 @@
 </template>
 
 <script>
-  export default {
+export default {
     name: 'App',
     mounted () {
-      let vm = this
-      vm.$logger.debug(`Controller framework `, this)
-      vm.$logger.debug(`Launcher Settings`, this.$settings)
+        let vm = this;
+        vm.$logger.debug('Controller framework ', this);
+        vm.$logger.debug('Launcher Settings', this.$settings);
     }
-  }
+};
 </script>
 
 <style lang="stylus">

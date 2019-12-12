@@ -15,20 +15,20 @@
 </template>
 
 <script>
-import SearchBar from '../Public/SearchBar'
-import Navigation from '../Public/Navigation'
+import SearchBar from '../Public/SearchBar';
+import Navigation from '../Public/Navigation';
 export default {
-  name: 'Main',
-  components: { SearchBar, Navigation },
-  mounted: () => {
+    name: 'Main',
+    components: { SearchBar, Navigation },
+    mounted: () => {
     // console.log('Main', this)
-  },
-  data () {
-    return {
-      msg: ''
+    },
+    data () {
+        return {
+            msg: ''
+        };
     }
-  }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

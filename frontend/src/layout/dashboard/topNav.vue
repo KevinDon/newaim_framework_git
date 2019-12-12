@@ -34,25 +34,25 @@
 </template>
 
 <script>
-    export default {
-        props: {
-            hasLogo: {
-                type: Boolean,
-                default: false,
-            }
-        },
-        data() {
-            return {
-                activeIndex: '1',
-            };
-        },
-        methods: {
-            handleSelect(key, keyPath) {
+export default {
+    props: {
+        hasLogo: {
+            type: Boolean,
+            default: false
+        }
+    },
+    data() {
+        return {
+            activeIndex: '1'
+        };
+    },
+    methods: {
+        handleSelect(key, keyPath) {
 
-            },
-            toggleLeftNav() {
-                this.$emit('toggleLeftNav')
-            }
+        },
+        toggleLeftNav() {
+            this.$emit('toggleLeftNav');
         }
     }
+};
 </script>

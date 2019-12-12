@@ -20,13 +20,13 @@
 
 <script>
 export default {
-  name: 'UpdateLog',
-  data () {
-    return {
-      msg: ''
+    name: 'UpdateLog',
+    data () {
+        return {
+            msg: ''
+        };
     }
-  }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

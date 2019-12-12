@@ -17,16 +17,16 @@
 </template>
 
 <script>
-import ListCard from '../Public/ListCard'
+import ListCard from '../Public/ListCard';
 export default {
-  name: 'ProductBanner',
-  components: { ListCard },
-  data () {
-    return {
-      msg: ''
+    name: 'ProductBanner',
+    components: { ListCard },
+    data () {
+        return {
+            msg: ''
+        };
     }
-  }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

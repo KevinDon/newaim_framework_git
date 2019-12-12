@@ -43,79 +43,79 @@
 
 <script>
 export default {
-  name: 'Login',
-  created: function () {
+    name: 'Login',
+    created: function () {
     // let url = this.HOME + '/verify?email=jenny_leon@163.com&password=newaim'
     // this.$http.post(url).then(function (response) {
     //   console.log(888, response)
     // })
-  },
-  mounted: () => {
-    console.log()
-  },
-  methods: {
-    handleLogin: function () {
-      let account = this.$refs.account.value
-      let password = this.$refs.password.value
+    },
+    mounted: () => {
+        console.log();
+    },
+    methods: {
+        handleLogin: function () {
+            let account = this.$refs.account.value;
+            let password = this.$refs.password.value;
 
-      if (!account && !password) {
-        this.$message({
-          message: 'Account and Password cannot be empty',
-          type: 'error',
-          duration: 5000
-        })
-        return
-      }
+            if (!account && !password) {
+                this.$message({
+                    message: 'Account and Password cannot be empty',
+                    type: 'error',
+                    duration: 5000
+                });
+                return;
+            }
 
-      let url = this.HOME + '/verify'
-      let params = {}
-      params['email'] = account
-      params['password'] = password
+            let url = this.HOME + '/verify';
+            let params = {};
+            params['email'] = account;
+            params['password'] = password;
 
-      let me = this
-      // 显示遮罩
-      this.$store.dispatch('showloadingMask')
+            let me = this;
+            // 显示遮罩
+            this.$store.dispatch('showloadingMask');
 
-      // 开始请求api
-      this.$http.post(url, params).then(function (response) {
-        console.log(response)
-        me.$store.dispatch('hideloadingMask')
-        // 请求成功
-        if (response.data.status === true) {
-          me.$message({
-            message: response.data.message,
-            type: 'success',
-            duration: 5000
-          })
-          me.$store.dispatch('handleLogin', account)
-          me.$router.push('/MyAccount')
-        } else {
-          me.$message({
-            message: response.data.message,
-            type: 'error',
-            duration: 5000
-          })
+            // 开始请求api
+            this.$http.post(url, params).then(function (response) {
+                console.log(response);
+                me.$store.dispatch('hideloadingMask');
+                // 请求成功
+                if (response.data.status === true) {
+                    me.$message({
+                        message: response.data.message,
+                        type: 'success',
+                        duration: 5000
+                    });
+                    me.$store.dispatch('handleLogin', account);
+                    me.$router.push('/MyAccount');
+                } else {
+                    me.$message({
+                        message: response.data.message,
+                        type: 'error',
+                        duration: 5000
+                    });
+                }
+            }).catch(function (error) {
+                console.log(error);
+                me.$store.dispatch('hideloadingMask');
+                me.$message({
+                    message: 'Login Failed',
+                    type: 'error',
+                    duration: 5000
+                });
+            });
         }
-      }).catch(function (error) {
-        console.log(error)
-        me.$store.dispatch('hideloadingMask')
-        me.$message({
-          message: 'Login Failed',
-          type: 'error',
-          duration: 5000
-        })
-      })
+    },
+    data () {
+        return {
+            msg: '',
+            account: '',
+            password: '',
+            logosrc: '../../static/logo.png'
+        };
     }
-  },
-  data () {
-    return {
-      msg: '',
-      account: '',
-      password: '',
-      logosrc: '../../static/logo.png'
-    }
-  }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

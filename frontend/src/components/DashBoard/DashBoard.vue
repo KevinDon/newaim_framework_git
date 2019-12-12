@@ -6,22 +6,22 @@
 
 <script>
 export default {
-  name: 'DashBoard',
-  created: function () {
-    console.log(123)
-  },
-  mounted: function () {
+    name: 'DashBoard',
+    created: function () {
+        console.log(123);
+    },
+    mounted: function () {
 
-  },
-  data () {
-    return {
-      msg: ''
+    },
+    data () {
+        return {
+            msg: ''
+        };
+    },
+    methods: {
+
     }
-  },
-  methods: {
-
-  }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

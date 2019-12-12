@@ -49,58 +49,64 @@
 
 <script>
 export default {
-  name: 'ListCard',
-  props: {
-    title: '',
-    price: '',
-    rrp: '',
-    small_image: '',
-    sku: '',
-    imported: '',
-    pageviews: '',
-    product_id: '',
-    is_import: ''
-  },
-  methods: {
-    checkboxchange: function (value) {
-      if (value) {
-        this.$emit('importTolist', this.product_id)
-      } else {
-        this.$emit('removeFromlist', this.product_id)
-      }
+    name: 'ListCard',
+    props: {
+        title: '',
+        price: '',
+        rrp: '',
+        small_image: '',
+        sku: '',
+        imported: '',
+        pageviews: '',
+        product_id: '',
+        is_import: ''
     },
-    jumpDetails: function () {
-      this.$router.push({name: 'DetailsView', params: {product_id: this.product_id}})
-    }
-  },
-  created: function () {
+    methods: {
+        checkboxchange: function (value) {
+            if (value) {
+                this.$emit('importTolist', this.product_id);
+            } else {
+                this.$emit('removeFromlist', this.product_id);
+            }
+        },
+        jumpDetails: function () {
+            this.$router.push({ name: 'DetailsView', params: { product_id: this.product_id } });
+        }
+    },
+    created: function () {
 
-  },
-  computed: {
-    hasImported: {
-      get () { return this.is_import !== 0 },
-      set (value) {}
     },
-    canEdit: {
-      get () { return (this.is_import !== 0 && this.imported !== 0) },
-      set (value) {}
+    computed: {
+        hasImported: {
+            get () {
+                return this.is_import !== 0;
+            },
+            set (value) {}
+        },
+        canEdit: {
+            get () {
+                return (this.is_import !== 0 && this.imported !== 0);
+            },
+            set (value) {}
+        },
+        canImported: {
+            get () {
+                return (this.is_import === 0 || this.is_import === -1);
+            },
+            set (value) {}
+        }
     },
-    canImported: {
-      get () { return (this.is_import === 0 || this.is_import === -1) },
-      set (value) {}
+    // watch: {
+    //   add (newVal, oldVal) {
+    //     console.log(111)
+    //   }
+    // },
+    data () {
+        return {
+            msg: ''
+        };
     }
-  },
-  // watch: {
-  //   add (newVal, oldVal) {
-  //     console.log(111)
-  //   }
-  // },
-  data () {
-    return {
-      msg: ''
-    }
-  }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

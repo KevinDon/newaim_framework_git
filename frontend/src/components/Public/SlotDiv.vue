@@ -8,13 +8,13 @@
 
 <script>
 export default {
-  name: 'SlotDiv',
-  data () {
-    return {
-      msg: ''
+    name: 'SlotDiv',
+    data () {
+        return {
+            msg: ''
+        };
     }
-  }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

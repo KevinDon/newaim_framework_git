@@ -53,104 +53,104 @@
 </template>
 
 <script>
-import ListCard from '../Public/ListCard'
+import ListCard from '../Public/ListCard';
 export default {
-  name: 'ManageProduct',
-  components: { ListCard },
-  created: function () {
-    let url = this.HOME + '/products/category'
-    let producturl = this.HOME + '/products/index'
-    let pageParams = { page_no: this.pageno, limit: this.limit }
-    let me = this
+    name: 'ManageProduct',
+    components: { ListCard },
+    created: function () {
+        let url = this.HOME + '/products/category';
+        let producturl = this.HOME + '/products/index';
+        let pageParams = { page_no: this.pageno, limit: this.limit };
+        let me = this;
 
-    // 循环生成category
-    let getchildren = function (data) {
-      for (let i = 0; i < data.length; i++) {
-        me.categorys.push({
-          id: data[i].id,
-          name: data[i].name,
-          parent_id: data[i].parent_id,
-          show: data[i].is_anchor === '1'
-        })
+        // 循环生成category
+        let getchildren = function (data) {
+            for (let i = 0; i < data.length; i++) {
+                me.categorys.push({
+                    id: data[i].id,
+                    name: data[i].name,
+                    parent_id: data[i].parent_id,
+                    show: data[i].is_anchor === '1'
+                });
 
-        if (data[i].children) {
-          getchildren(data[i].children)
-        }
-      }
-    }
+                if (data[i].children) {
+                    getchildren(data[i].children);
+                }
+            }
+        };
 
-    this.$store.dispatch('showloadingMask')
-    // 请求category
-    this.$http.get(url).then(function (response) {
-      // me.$store.dispatch('hideloadingMask')
-      if (response.data.status === true) {
-        getchildren(response.data.data)
-      }
+        this.$store.dispatch('showloadingMask');
+        // 请求category
+        this.$http.get(url).then(function (response) {
+            // me.$store.dispatch('hideloadingMask')
+            if (response.data.status === true) {
+                getchildren(response.data.data);
+            }
 
-      // 请求产品列表
-      me.$http.get(producturl, {params: pageParams}).then(function (response) {
-        me.$store.dispatch('hideloadingMask')
+            // 请求产品列表
+            me.$http.get(producturl, { params: pageParams }).then(function (response) {
+                me.$store.dispatch('hideloadingMask');
 
-        if (response.data.status === true) {
-          me.products = response.data.data.data
-          for (let i = 0; i < me.products.length; i++) {
-            me.products.add = me.products.is_import === 0
-          }
-          me.total_count = response.data.data.total_count
-        }
-        console.log(me.products)
-      }).catch(function (error) {
-        me.$store.dispatch('hideloadingMask')
-        console.log(error)
-      })
-    }).catch(function (error) {
-      me.$store.dispatch('hideloadingMask')
-      console.log(error)
-    })
-  },
-  methods: {
-    handleSizeChange: function (size) {
-      let me = this
-      let producturl = this.HOME + '/products/index'
-      let pageParams = { page_no: this.pageno, limit: size }
-      this.$store.dispatch('showloadingMask')
-
-      this.$http.get(producturl, {params: pageParams}).then(function (response) {
-        me.$store.dispatch('hideloadingMask')
-
-        if (response.data.status === true) {
-          me.products = response.data.data.data
-        }
-        console.log(me.products)
-      }).catch(function (error) {
-        me.$store.dispatch('hideloadingMask')
-        console.log(error)
-      })
+                if (response.data.status === true) {
+                    me.products = response.data.data.data;
+                    for (let i = 0; i < me.products.length; i++) {
+                        me.products.add = me.products.is_import === 0;
+                    }
+                    me.total_count = response.data.data.total_count;
+                }
+                console.log(me.products);
+            }).catch(function (error) {
+                me.$store.dispatch('hideloadingMask');
+                console.log(error);
+            });
+        }).catch(function (error) {
+            me.$store.dispatch('hideloadingMask');
+            console.log(error);
+        });
     },
-    importlist: function (productid) {
-      alert(productid)
-    },
-    selectall: function () {
-      console.log(this.products)
-      let me = this
-      for (let i = 0; i < this.products.length; i++) {
-        if (me.products[i].is_import === 0) {
-          me.products[i].add = true
+    methods: {
+        handleSizeChange: function (size) {
+            let me = this;
+            let producturl = this.HOME + '/products/index';
+            let pageParams = { page_no: this.pageno, limit: size };
+            this.$store.dispatch('showloadingMask');
+
+            this.$http.get(producturl, { params: pageParams }).then(function (response) {
+                me.$store.dispatch('hideloadingMask');
+
+                if (response.data.status === true) {
+                    me.products = response.data.data.data;
+                }
+                console.log(me.products);
+            }).catch(function (error) {
+                me.$store.dispatch('hideloadingMask');
+                console.log(error);
+            });
+        },
+        importlist: function (productid) {
+            alert(productid);
+        },
+        selectall: function () {
+            console.log(this.products);
+            let me = this;
+            for (let i = 0; i < this.products.length; i++) {
+                if (me.products[i].is_import === 0) {
+                    me.products[i].add = true;
+                }
+            }
         }
-      }
+    },
+    data () {
+        return {
+            msg: '',
+            total_count: 0,
+            categorys: [],
+            products: [],
+            pageno: 1,
+            limit: 40
+        };
     }
-  },
-  data () {
-    return {
-      msg: '',
-      total_count: 0,
-      categorys: [],
-      products: [],
-      pageno: 1,
-      limit: 40
-    }
-  }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

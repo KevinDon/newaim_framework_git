@@ -84,74 +84,74 @@
 
 <script>
 export default {
-  name: 'MyAccount',
-  mounted: function () {
+    name: 'MyAccount',
+    mounted: function () {
     // if (this.$store.state.email) {
-    let url = this.HOME + '/users/getuserinfo?email='
-    let me = this
+        let url = this.HOME + '/users/getuserinfo?email=';
+        let me = this;
 
-    this.$store.dispatch('showloadingMask')
-    this.$http.get(url).then(function (response) {
-      if (response.data.status === true) {
-        me.$store.dispatch('hideloadingMask')
-        me.$store.dispatch('getuserInfo', response.data.result)
+        this.$store.dispatch('showloadingMask');
+        this.$http.get(url).then(function (response) {
+            if (response.data.status === true) {
+                me.$store.dispatch('hideloadingMask');
+                me.$store.dispatch('getuserInfo', response.data.result);
 
-        me.update_stock = response.data.result.update_stock
-        me.update_product = response.data.result.update_product
-        me.update_price = response.data.result.update_price
-      } else {
+                me.update_stock = response.data.result.update_stock;
+                me.update_product = response.data.result.update_product;
+                me.update_price = response.data.result.update_price;
+            } else {
 
-      }
-    }).catch(function (error) {
-      me.$store.dispatch('hideloadingMask')
-      me.$message.error('Failed to obtain user information. Please try again later.')
-      console.log(error)
-    })
+            }
+        }).catch(function (error) {
+            me.$store.dispatch('hideloadingMask');
+            me.$message.error('Failed to obtain user information. Please try again later.');
+            console.log(error);
+        });
     // }
-  },
-  methods: {
-    saveconfig: function () {
-      let params = {
-        update_stock: this.update_stock,
-        update_product: this.update_product,
-        update_price: this.update_price
-      }
-      let url = this.HOME + '/users/update'
-      let me = this
-      this.$http.post(url, {params: params}).then(function (response) {
-        console.log(response)
-      }).catch(function (error) {
-        console.log(error)
-        me.$store.dispatch('hideloadingMask')
-        me.$message.error('Save failed, please try again later')
-      })
     },
-    accountRemove: function () {
-      this.$confirm('Are you sure you to unbind the Dropshipzone Account', 'Notice', {
-        confirmButtonText: 'Yes',
-        cancelButtonText: 'No',
-        type: 'warning'
-      }).then(() => {
+    methods: {
+        saveconfig: function () {
+            let params = {
+                update_stock: this.update_stock,
+                update_product: this.update_product,
+                update_price: this.update_price
+            };
+            let url = this.HOME + '/users/update';
+            let me = this;
+            this.$http.post(url, { params: params }).then(function (response) {
+                console.log(response);
+            }).catch(function (error) {
+                console.log(error);
+                me.$store.dispatch('hideloadingMask');
+                me.$message.error('Save failed, please try again later');
+            });
+        },
+        accountRemove: function () {
+            this.$confirm('Are you sure you to unbind the Dropshipzone Account', 'Notice', {
+                confirmButtonText: 'Yes',
+                cancelButtonText: 'No',
+                type: 'warning'
+            }).then(() => {
 
-      }).catch(() => {
-        // 取消操作
-        // this.$message({
-        //   type: 'info',
-        //   message: '已取消删除'
-        // })
-      })
+            }).catch(() => {
+                // 取消操作
+                // this.$message({
+                //   type: 'info',
+                //   message: '已取消删除'
+                // })
+            });
+        }
+    },
+    data () {
+        return {
+            msg: '',
+            email: '',
+            update_product: true,
+            update_stock: true,
+            update_price: true
+        };
     }
-  },
-  data () {
-    return {
-      msg: '',
-      email: '',
-      update_product: true,
-      update_stock: true,
-      update_price: true
-    }
-  }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

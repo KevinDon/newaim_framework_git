@@ -29,6 +29,7 @@
             :prop="_column.field"
             :label="_column.title"
             :sortable="_column.sort"
+            v-if="_column.visable"
             width="!!_column.width ? _column.width : '180px'"
           >
             <template slot-scope="scope">

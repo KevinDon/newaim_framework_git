@@ -74,100 +74,100 @@
 </template>
 
 <script>
-import ProductBar from '../Public/ProductBar'
-import ProductDetail from '../Product/ProductDetail'
+import ProductBar from '../Public/ProductBar';
+import ProductDetail from '../Product/ProductDetail';
 export default {
-  name: 'MyProduct',
-  components: { ProductBar, ProductDetail },
-  created () {
-  },
-  mounted () {
-    let url = this.HOME + '/products/myproduct/list'
-    let pageParams = { status: this.status, page_no: this.pageno, limit: this.limit, keywords: this.keywords, product_id: this.curProduct_id }
-    let me = this
-    this.$http.get(url, {params: pageParams}).then(function (response) {
-      console.log(response)
-      me.products = response.data.data.data
-      me.total_count = response.data.data.total_count
-      console.log(me.products)
-    })
-  },
-  methods: {
-    changePage: function (page) {
-      this.page_no = page
-      let url = this.HOME + '/products/myproduct/list'
-      let pageParams = { status: this.status, page_no: this.pageno, limit: this.limit, keywords: this.keywords, product_id: this.curProduct_id }
-      let me = this
-      this.$http.get(url, {params: pageParams}).then(function (response) {
-        console.log(response)
-        me.products = response.data.data.data
-        me.total_count = response.data.data.total_count
-        console.log(me.products)
-      })
+    name: 'MyProduct',
+    components: { ProductBar, ProductDetail },
+    created () {
     },
-    showMsg: function () {
+    mounted () {
+        let url = this.HOME + '/products/myproduct/list';
+        let pageParams = { status: this.status, page_no: this.pageno, limit: this.limit, keywords: this.keywords, product_id: this.curProduct_id };
+        let me = this;
+        this.$http.get(url, { params: pageParams }).then(function (response) {
+            console.log(response);
+            me.products = response.data.data.data;
+            me.total_count = response.data.data.total_count;
+            console.log(me.products);
+        });
+    },
+    methods: {
+        changePage: function (page) {
+            this.page_no = page;
+            let url = this.HOME + '/products/myproduct/list';
+            let pageParams = { status: this.status, page_no: this.pageno, limit: this.limit, keywords: this.keywords, product_id: this.curProduct_id };
+            let me = this;
+            this.$http.get(url, { params: pageParams }).then(function (response) {
+                console.log(response);
+                me.products = response.data.data.data;
+                me.total_count = response.data.data.total_count;
+                console.log(me.products);
+            });
+        },
+        showMsg: function () {
 
-    },
-    handleSizeChange: function () {
+        },
+        handleSizeChange: function () {
 
+        },
+        showDeleteDialog: function () {
+            this.deleteDialogVisible = true;
+        },
+        loadProduct: function (productId) {
+            this.curProduct_id = productId;
+            this.loading = true;
+            let url = this.HOME + '/products/myproduct/list';
+            let pageParams = { status: this.status, page_no: this.pageno, limit: this.limit, keywords: this.keywords, product_id: this.curProduct_id };
+            let me = this;
+            this.$http.get(url, { params: pageParams }).then(function (response) {
+                console.log(response);
+                me.loading = false;
+                me.curProduct = response.data.data.product[0];
+            });
+        },
+        deleteProduct: function () {
+            alert(123);
+        },
+        filter: function () {
+            let url = this.HOME + '/products/myproduct/list';
+            let pageParams = { status: this.status, page_no: this.pageno, limit: this.limit, keywords: this.keywords, product_id: this.curProduct_id };
+            let me = this;
+            this.$http.get(url, { params: pageParams }).then(function (response) {
+                console.log(response);
+                me.products = response.data.data.data;
+                console.log(me.products);
+            });
+        }
     },
-    showDeleteDialog: function () {
-      this.deleteDialogVisible = true
-    },
-    loadProduct: function (productId) {
-      this.curProduct_id = productId
-      this.loading = true
-      let url = this.HOME + '/products/myproduct/list'
-      let pageParams = { status: this.status, page_no: this.pageno, limit: this.limit, keywords: this.keywords, product_id: this.curProduct_id }
-      let me = this
-      this.$http.get(url, {params: pageParams}).then(function (response) {
-        console.log(response)
-        me.loading = false
-        me.curProduct = response.data.data.product[0]
-      })
-    },
-    deleteProduct: function () {
-      alert(123)
-    },
-    filter: function () {
-      let url = this.HOME + '/products/myproduct/list'
-      let pageParams = { status: this.status, page_no: this.pageno, limit: this.limit, keywords: this.keywords, product_id: this.curProduct_id }
-      let me = this
-      this.$http.get(url, {params: pageParams}).then(function (response) {
-        console.log(response)
-        me.products = response.data.data.data
-        console.log(me.products)
-      })
+    data () {
+        return {
+            status: 0,
+            pageno: 1,
+            limit: 1,
+            total_count: 0,
+            keywords: '',
+            curProduct_id: '',
+            loading: false,
+            options: [{
+                value: '0',
+                label: 'Status:All'
+            }, {
+                value: '1',
+                label: 'Status:Removed form shopify'
+            }, {
+                value: '2',
+                label: 'Status:Gone form supplier'
+            }],
+            value: '0',
+            products: [],
+            curProduct: {},
+            deleteDialogVisible: false,
+            deleteDialogMsg: 'Are you sure you want to delete product',
+            del_shopifly: false
+        };
     }
-  },
-  data () {
-    return {
-      status: 0,
-      pageno: 1,
-      limit: 1,
-      total_count: 0,
-      keywords: '',
-      curProduct_id: '',
-      loading: false,
-      options: [{
-        value: '0',
-        label: 'Status:All'
-      }, {
-        value: '1',
-        label: 'Status:Removed form shopify'
-      }, {
-        value: '2',
-        label: 'Status:Gone form supplier'
-      }],
-      value: '0',
-      products: [],
-      curProduct: {},
-      deleteDialogVisible: false,
-      deleteDialogMsg: 'Are you sure you want to delete product',
-      del_shopifly: false
-    }
-  }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

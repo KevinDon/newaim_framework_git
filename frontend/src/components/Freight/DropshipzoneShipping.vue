@@ -54,27 +54,25 @@
 
 <script>
 export default {
-  name: 'DropshipzoneShipping',
-  methods: {
-    addSku: function () {
-      this.skulist.push({
-        sku: '', qty: 0
-      })
+    name: 'DropshipzoneShipping',
+    methods: {
+        addSku: function () {
+            this.skulist.push({
+                sku: '', qty: 0
+            });
+        }
+    },
+    data () {
+        return {
+            msg: '',
+            postcode: '',
+            suburb: '',
+            address: '',
+            skulist: [{ sku: '123', qty: 20 },
+                { sku: '456', qty: 22 }]
+        };
     }
-  },
-  data () {
-    return {
-      msg: '',
-      postcode: '',
-      suburb: '',
-      address: '',
-      skulist: [
-        {sku: '123', qty: 20},
-        {sku: '456', qty: 22}
-      ]
-    }
-  }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

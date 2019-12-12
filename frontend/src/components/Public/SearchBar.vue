@@ -35,78 +35,78 @@
 
 <script>
 export default {
-  name: 'SearchBar',
-  created: function () {
-    let url = this.HOME + '/products/category'
-    let me = this
+    name: 'SearchBar',
+    created: function () {
+        let url = this.HOME + '/products/category';
+        let me = this;
 
-    // 循环生成category
-    let getchildren = function (data) {
-      for (let i = 0; i < data.length; i++) {
-        me.categorys.push({
-          category_id: data[i].category_id,
-          name: data[i].name,
-          parent_id: data[i].parent_id,
-          show: data[i].is_anchor === '1',
-          menu: data[i].include_in_menu,
-          children: data[i].children
-        })
+        // 循环生成category
+        let getchildren = function (data) {
+            for (let i = 0; i < data.length; i++) {
+                me.categorys.push({
+                    category_id: data[i].category_id,
+                    name: data[i].name,
+                    parent_id: data[i].parent_id,
+                    show: data[i].is_anchor === '1',
+                    menu: data[i].include_in_menu,
+                    children: data[i].children
+                });
 
-        if (data[i].children) {
-          getchildren(data[i].children)
+                if (data[i].children) {
+                    getchildren(data[i].children);
+                }
+            }
+        };
+
+        this.$http.get(url).then(function (response) {
+            if (response.data.status === true) {
+                getchildren(response.data.data, me);
+                me.searchCategorys.push({ category_id: 2, name: 'All Category' });
+                for (let i = 0; i < me.categorys.length; i++) {
+                    if (me.categorys[i].show === true) {
+                        me.searchCategorys.push({
+                            category_id: me.categorys[i].category_id,
+                            name: me.categorys[i].name
+                        });
+                    }
+                }
+                console.log(me.searchCategorys);
+            }
+        });
+    },
+    methods: {
+        searchkeyword: function () {
+            console.log(this.select);
+            let categoryId = 0;
+            let keyword = this.keyword;
+            if (this.select === 'All Category') {
+                categoryId = '';
+            } else {
+                categoryId = this.select;
+            }
+
+            let me = this;
+            let url = this.HOME + '/products/search';
+            let pageParams = { limit: 40, page_no: 1, keywords: keyword, category_id: categoryId };
+
+            this.$store.dispatch('showloadingMask');
+            this.$http.get(url, { params: pageParams }).then(function (response) {
+                console.log(response);
+                me.$store.dispatch('updateProductList', response.data.data);
+                me.$store.dispatch('hideloadingMask');
+            });
         }
-      }
+    },
+    data () {
+        return {
+            keyword: '',
+            select: 'All Category',
+            categorys: [],
+            searchCategorys: [],
+            logosrc: '../../static/small.png'
+        };
     }
-
-    this.$http.get(url).then(function (response) {
-      if (response.data.status === true) {
-        getchildren(response.data.data, me)
-        me.searchCategorys.push({category_id: 2, name: 'All Category'})
-        for (let i = 0; i < me.categorys.length; i++) {
-          if (me.categorys[i].show === true) {
-            me.searchCategorys.push({
-              category_id: me.categorys[i].category_id,
-              name: me.categorys[i].name
-            })
-          }
-        }
-        console.log(me.searchCategorys)
-      }
-    })
-  },
-  methods: {
-    searchkeyword: function () {
-      console.log(this.select)
-      let categoryId = 0
-      let keyword = this.keyword
-      if (this.select === 'All Category') {
-        categoryId = ''
-      } else {
-        categoryId = this.select
-      }
-
-      let me = this
-      let url = this.HOME + '/products/search'
-      let pageParams = { limit: 40, page_no: 1, keywords: keyword, category_id: categoryId }
-
-      this.$store.dispatch('showloadingMask')
-      this.$http.get(url, {params: pageParams}).then(function (response) {
-        console.log(response)
-        me.$store.dispatch('updateProductList', response.data.data)
-        me.$store.dispatch('hideloadingMask')
-      })
-    }
-  },
-  data () {
-    return {
-      keyword: '',
-      select: 'All Category',
-      categorys: [],
-      searchCategorys: [],
-      logosrc: '../../static/small.png'
-    }
-  }
-}
+};
 </script>
 
 <style scoped>

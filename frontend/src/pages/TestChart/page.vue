@@ -28,93 +28,91 @@
 </template>
 
 <script>
-import gql from "graphql-tag";
+import gql from 'graphql-tag';
 
 export default {
-  name: "page.vue",
-  components: {
-    vueChart: () => import("@/core/components/Chart/LineChart"),
-    grap: () => import("./components/testGraphql")
-  },
-  data() {
-    return {
-      seed: 0,
-      userInfo: {},
-      user_id: 0
-    };
-  },
-  mounted() {
-    this.fillData();
-  },
-  methods: {
-    getRemoteUserById() {
-      this.$http.post("/user/id/814", {}).then(result => {
+    name: 'page.vue',
+    components: {
+        vueChart: () => import('@/core/components/Chart/LineChart'),
+        grap: () => import('./components/testGraphql')
+    },
+    data() {
+        return {
+            seed: 0,
+            userInfo: {},
+            user_id: 0
+        };
+    },
+    mounted() {
+        this.fillData();
+    },
+    methods: {
+        getRemoteUserById() {
+            this.$http.post('/user/id/814', {}).then(result => {
 
-        this.userInfo = result.data;
-      });
-    },
+                this.userInfo = result.data;
+            });
+        },
 
-    fillData() {
-      // return
-      // this.datacollection = {
-      //   labels: [this.getRandomInt, this.getRandomInt],
-      //   datasets: [
-      //     {
-      //       label: 'Data One',
-      //       backgroundColor: '#f87979',
-      //       data: [this.getRandomInt, this.getRandomInt]
-      //     }, {
-      //       label: 'Data Two',
-      //       backgroundColor: '#f87979',
-      //       data: [this.getRandomInt, this.getRandomInt]
-      //     }
-      //   ]
-      // }
+        fillData() {
+            // return
+            // this.datacollection = {
+            //   labels: [this.getRandomInt, this.getRandomInt],
+            //   datasets: [
+            //     {
+            //       label: 'Data One',
+            //       backgroundColor: '#f87979',
+            //       data: [this.getRandomInt, this.getRandomInt]
+            //     }, {
+            //       label: 'Data Two',
+            //       backgroundColor: '#f87979',
+            //       data: [this.getRandomInt, this.getRandomInt]
+            //     }
+            //   ]
+            // }
+        },
+        randomData() {
+            this.$nextTick(() => {
+                this.seed = Math.floor(Math.random() * (50 - 5 + 1)) + 5;
+            });
+        }
     },
-    randomData() {
-      this.$nextTick(() => {
-        this.seed = Math.floor(Math.random() * (50 - 5 + 1)) + 5;
-      });
+    computed: {
+        getRandomInt() {
+            return this.seed;
+        },
+        getRandomData1() {
+            let seed = this.seed * Math.floor(Math.random() * 100);
+            let data = [];
+            for (let i = 0; i < seed; i++) {
+                data.push(Math.floor(Math.random() * 100));
+            }
+            return data;
+        },
+        getRandomData2() {
+            let seed = this.seed * Math.floor(Math.random() * 100);
+            let data = [];
+            for (let i = 0; i < seed; i++) {
+                data.push(Math.floor(Math.random() * 100));
+            }
+            return data;
+        },
+        datacollection() {
+            return {
+                labels: [this.getRandomInt, this.getRandomInt],
+                datasets: [{
+                    label: 'Data One',
+                    backgroundColor: '#f87979',
+                    data: [...this.getRandomData1]
+                },
+                {
+                    label: 'Data Two',
+                    backgroundColor: '#6f87f8',
+                    data: [...this.getRandomData2]
+                }]
+            };
+        }
     }
-  },
-  computed: {
-    getRandomInt() {
-      return this.seed;
-    },
-    getRandomData1() {
-      let seed = this.seed * Math.floor(Math.random() * 100);
-      let data = [];
-      for (let i = 0; i < seed; i++) {
-        data.push(Math.floor(Math.random() * 100));
-      }
-      return data;
-    },
-    getRandomData2() {
-      let seed = this.seed * Math.floor(Math.random() * 100);
-      let data = [];
-      for (let i = 0; i < seed; i++) {
-        data.push(Math.floor(Math.random() * 100));
-      }
-      return data;
-    },
-    datacollection() {
-      return {
-        labels: [this.getRandomInt, this.getRandomInt],
-        datasets: [
-          {
-            label: "Data One",
-            backgroundColor: "#f87979",
-            data: [...this.getRandomData1]
-          },
-          {
-            label: "Data Two",
-            backgroundColor: "#6f87f8",
-            data: [...this.getRandomData2]
-          }
-        ]
-      };
-    }
-  }
 };
 </script>
 

@@ -30,9 +30,9 @@
         <!-- 根据vue routes list 生成菜单 -->
         <template v-for="route in routerList[0].children">
           <template v-if="route.children.length > 1">
-            <el-submenu :index="route.path" icon="el-icon-user">
+            <el-submenu :index="route.path" icon="el-icon-user" :key="route.name">
               <template slot="title">
-                <i class="el-icon-location"></i>
+                <i :class="route.icon"></i>
                 <span slot="title">{{route.name}}</span>
               </template>
               <el-menu-item
@@ -48,10 +48,10 @@
             </el-submenu>
           </template>
           <template v-else>
-            <el-menu-item :index="route.path">
+            <el-menu-item :index="route.children[0].path" :key="route.children[0].name">
               <template>
-                <i :class="route.icon"></i>
-                <span slot="title">{{route.title || route.name}}</span>
+                <i :class="route.children[0].icon"></i>
+                <span slot="title">{{route.children[0].title || route.children[0].name}}</span>
               </template>
             </el-menu-item>
           </template>
@@ -68,42 +68,41 @@
 </style>
 
 <script>
-const Settings = () => import("@/settings");
 
 export default {
-  props: {
-    isCollapse: {
-      type: Boolean,
-      default: false
-    }
-  },
-  data() {
-    return {
-      showFullMenu: true
-    };
-  },
-  methods: {
-    handleOpen(key, keyPath) {},
-    handleClose(key, keyPath) {}
-  },
-  computed: {
+    props: {
+        isCollapse: {
+            type: Boolean,
+            default: false
+        }
+    },
+    data() {
+        return {
+            showFullMenu: true
+        };
+    },
+    methods: {
+        handleOpen(key, keyPath) {},
+        handleClose(key, keyPath) {}
+    },
+    computed: {
     //
 
     // 路由列表 - 菜单列表
-    routerList: function() {
-      return this.$router.options.routes;
-    },
-    curRouter: {
-      get() {
-        return this.$route;
-      }
-    },
-    isCollapsed: {
-      get() {
-        return this.isCollapse;
-      }
+        routerList: function() {
+            return this.$router.options.routes;
+        },
+        curRouter: {
+            get() {
+                return this.$route;
+            }
+        },
+        isCollapsed: {
+            get() {
+                return this.isCollapse;
+            }
+        }
     }
-  }
 };
 </script>
 

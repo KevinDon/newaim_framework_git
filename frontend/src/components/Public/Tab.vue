@@ -128,52 +128,54 @@
 </template>
 
 <script>
-import SlotDiv from '../Public/SlotDiv'
-import { VueEditor } from 'vue2-editor'
+import SlotDiv from '../Public/SlotDiv';
+import { VueEditor } from 'vue2-editor';
 
 export default {
-  name: 'ImportList',
-  components: { SlotDiv, VueEditor },
-  created () {
-    this.productList.push(this.product)
-  },
-  computed: {
-    editPrice: {
-      get () {
-        return this.price
-      },
-      set (value) {
-        // this.priceChange.call(this, value)
-      }
-    }
-  },
-  props: ['TabHeads', 'product', 'title', 'description', 'small_image', 'price', 'add'],
-  data () {
-    return {
-      curId: 0,
-      checked: false,
-      input: '',
-      info: this.description,
-      productList: [],
-      // editPrice: 0,
-      comparePrice: 0,
-      contents: [
-        {content: 'HTML'},
-        {content: 'CSS'},
-        {content: 'JavaScript'},
-        {content: 'Vue'}
-      ]
-    }
-  },
-  methods: {
-    tab (index) {
-      this.curId = index
+    name: 'ImportList',
+    components: { SlotDiv, VueEditor },
+    created () {
+        this.productList.push(this.product);
     },
-    priceChange: function (value) {
-      this.editPrice = value
+    computed: {
+        editPrice: {
+            get () {
+                return this.price;
+            },
+            set (value) {
+                // this.priceChange.call(this, value)
+            }
+        }
+    },
+    props: [
+        'TabHeads', 'product', 'title', 'description', 'small_image', 'price', 'add'
+    ],
+    data () {
+        return {
+            curId: 0,
+            checked: false,
+            input: '',
+            info: this.description,
+            productList: [],
+            // editPrice: 0,
+            comparePrice: 0,
+            contents: [
+                { content: 'HTML' },
+                { content: 'CSS' },
+                { content: 'JavaScript' },
+                { content: 'Vue' }
+            ]
+        };
+    },
+    methods: {
+        tab (index) {
+            this.curId = index;
+        },
+        priceChange: function (value) {
+            this.editPrice = value;
+        }
     }
-  }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

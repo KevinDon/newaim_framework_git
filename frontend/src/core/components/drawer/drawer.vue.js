@@ -1,29 +1,34 @@
+import baseDataComp from '@/core/components/baseData/baseData';
+import DrawerStore from './drawer.store.js';
+
+let defaultPropConf = { position: 'right' };
+
 export default {
-  name: 'drawer.vue',
-  props:{
-    conf:{
-
+    name: 'drawer.vue',
+    extends: baseDataComp,
+    compInnerStore: DrawerStore,
+    props: {
+        conf: {
+            type: Object,
+            default: () => defaultPropConf
+        }
     },
-    state:{
-      isShow:{
-        type:Boolean
-      }
-    }
-  },
-  data(){
-    return{
-      isShowed:false
-    }
-  },
-  methods:{
-    handleClose(){
-      let vm = this
-      vm.$emit('drawerClosed')
+    data() {
+        return {};
     },
-    handleOpen(){
-      let vm = this
-      vm.$emit('drawerOpened')
-    }
-  }
+    mounted() {
+        let vm = this;
+    },
+    methods: {
+        handleClose() {
+            let vm = this;
 
-}
+            vm.$emit('drawerClosed');
+        },
+        handleOpen() {
+            let vm = this;
+
+            vm.$emit('drawerOpened');
+        }
+    }
+};

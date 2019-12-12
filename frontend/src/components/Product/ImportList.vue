@@ -59,76 +59,80 @@
 </template>
 
 <script>
-import Tab from '../Public/Tab'
+import Tab from '../Public/Tab';
 export default {
-  name: 'ImportList',
-  components: {
-    Tab
-  },
-  created: function () {
-    let url = this.HOME + 'products/import/list'
-    let pageParams = { page_no: this.pageno, limit: this.limit, keywords: this.keywords }
-    if (this.$route.params.import_id) { pageParams.import_id = this.$route.params.import_id }
-    let me = this
-    this.$store.dispatch('showloadingMask')
-    this.$http.get(url, {params: pageParams}).then(function (response) {
-      me.$store.dispatch('hideloadingMask')
-      console.log(response)
-      if (response.data.status === true) {
-        me.products = response.data.data.data
-        for (let i = 0; i < me.products.length; i++) {
-          me.products[i].add = false
-        }
-        me.total_count = response.data.data.total_count
-      }
-    }).catch(function (error) {
-      me.$store.dispatch('hideloadingMask')
-      console.log(error)
-    })
-  },
-  data () {
-    return {
-      msg: '',
-      pageno: 1,
-      limit: 10,
-      total_count: 0,
-      keywords: '',
-      TabHeads: ['Product', 'Desccription', 'Variants', 'Images'],
-      products: [],
-      selectall: false,
-      importdialogVisible: false,
-      removedialogVisible: false
-    }
-  },
-  methods: {
-    selectallFun: function (value) {
-      let me = this
-      if (value) {
-        for (let i = 0; i < me.products.length; i++) {
-          me.products[i].add = true
-        }
-      } else {
-        for (let i = 0; i < me.products.length; i++) {
-          me.products[i].add = false
-        }
-      }
-      this.products = [...this.products]
+    name: 'ImportList',
+    components: {
+        Tab
     },
+    created: function () {
+        let url = this.HOME + 'products/import/list';
+        let pageParams = { page_no: this.pageno, limit: this.limit, keywords: this.keywords };
+        if (this.$route.params.import_id) {
+            pageParams.import_id = this.$route.params.import_id;
+        }
+        let me = this;
+        this.$store.dispatch('showloadingMask');
+        this.$http.get(url, { params: pageParams }).then(function (response) {
+            me.$store.dispatch('hideloadingMask');
+            console.log(response);
+            if (response.data.status === true) {
+                me.products = response.data.data.data;
+                for (let i = 0; i < me.products.length; i++) {
+                    me.products[i].add = false;
+                }
+                me.total_count = response.data.data.total_count;
+            }
+        }).catch(function (error) {
+            me.$store.dispatch('hideloadingMask');
+            console.log(error);
+        });
+    },
+    data () {
+        return {
+            msg: '',
+            pageno: 1,
+            limit: 10,
+            total_count: 0,
+            keywords: '',
+            TabHeads: [
+                'Product', 'Desccription', 'Variants', 'Images'
+            ],
+            products: [],
+            selectall: false,
+            importdialogVisible: false,
+            removedialogVisible: false
+        };
+    },
+    methods: {
+        selectallFun: function (value) {
+            let me = this;
+            if (value) {
+                for (let i = 0; i < me.products.length; i++) {
+                    me.products[i].add = true;
+                }
+            } else {
+                for (let i = 0; i < me.products.length; i++) {
+                    me.products[i].add = false;
+                }
+            }
+            this.products = [...this.products];
+        },
 
-    importall: function () {
-      this.importdialogVisible = true
-    },
-    confirmImport: function () {
-      this.importdialogVisible = false
-    },
-    removeall: function () {
-      this.removedialogVisible = true
-    },
-    confirmRemove: function () {
-      // this.removedialogVisible = false
+        importall: function () {
+            this.importdialogVisible = true;
+        },
+        confirmImport: function () {
+            this.importdialogVisible = false;
+        },
+        removeall: function () {
+            this.removedialogVisible = true;
+        },
+        confirmRemove: function () {
+            // this.removedialogVisible = false
+        }
     }
-  }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

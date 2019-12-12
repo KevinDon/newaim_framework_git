@@ -127,77 +127,77 @@
 
 <script>
 export default {
-  name: 'DetailsView',
-  methods: {
-    addImport: function () {
-      this.product.is_import = this.product._id
-      // let me = this
-      let importurl = this.HOME + '/products/import/insert'
+    name: 'DetailsView',
+    methods: {
+        addImport: function () {
+            this.product.is_import = this.product._id;
+            // let me = this
+            let importurl = this.HOME + '/products/import/insert';
 
-      this.$http.post(importurl, {product_ids: this.product._id}).then(function (response) {
-        console.log(response)
-      })
-    },
-    editImport: function () {
-      console.log(this.product.is_import)
-      this.$router.push({name: 'ImportList', params: {import_id: this.product.is_import}})
-    },
-    removeImport: function () {
-      let me = this
-      let url = this.HOME + '/products/import/remove'
-      console.log(this.product.is_import)
-      this.$http.post(url, {product_ids: this.product.is_import}).then(function (response) {
-        console.log(response)
-        me.product.is_import = 0
-      })
-    }
-  },
-  computed: {
-    restImg: function () {
-      if (this.product.gallery.length > 6) {
-        let rest = this.product.gallery.length - 6
-        return rest
-      } else {
-        return false
-      }
-    },
-    previewImage: function () {
-      return this.product.small_image
-    },
-    discountOff: function () {
-      let off = (((this.product.rrp - this.product.price) / this.product.rrp).toFixed(2)) * 100
-      return off
-    },
-    canImport: function () {
-      return this.product.is_import === 0
-    }
-  },
-  created: function () {
-    let url = this.HOME + '/products/view'
-    let me = this
-    let productId = this.$store.state.viewProductId
-    if (productId) {
-      let pageParams = { product_id: productId }
-      this.$http.get(url, {params: pageParams}).then(function (response) {
-        // console.log(response)
-        if (response.data.status === true) {
-          me.product = response.data.data
+            this.$http.post(importurl, { product_ids: this.product._id }).then(function (response) {
+                console.log(response);
+            });
+        },
+        editImport: function () {
+            console.log(this.product.is_import);
+            this.$router.push({ name: 'ImportList', params: { import_id: this.product.is_import } });
+        },
+        removeImport: function () {
+            let me = this;
+            let url = this.HOME + '/products/import/remove';
+            console.log(this.product.is_import);
+            this.$http.post(url, { product_ids: this.product.is_import }).then(function (response) {
+                console.log(response);
+                me.product.is_import = 0;
+            });
         }
-      }).catch(function (error) {
-        console.log(error)
-      })
-    } else {
-      me.$message.error('Failed to Get Product Information')
-      this.$router.push({name: 'SearchProduct'})
+    },
+    computed: {
+        restImg: function () {
+            if (this.product.gallery.length > 6) {
+                let rest = this.product.gallery.length - 6;
+                return rest;
+            } else {
+                return false;
+            }
+        },
+        previewImage: function () {
+            return this.product.small_image;
+        },
+        discountOff: function () {
+            let off = (((this.product.rrp - this.product.price) / this.product.rrp).toFixed(2)) * 100;
+            return off;
+        },
+        canImport: function () {
+            return this.product.is_import === 0;
+        }
+    },
+    created: function () {
+        let url = this.HOME + '/products/view';
+        let me = this;
+        let productId = this.$store.state.viewProductId;
+        if (productId) {
+            let pageParams = { product_id: productId };
+            this.$http.get(url, { params: pageParams }).then(function (response) {
+                // console.log(response)
+                if (response.data.status === true) {
+                    me.product = response.data.data;
+                }
+            }).catch(function (error) {
+                console.log(error);
+            });
+        } else {
+            me.$message.error('Failed to Get Product Information');
+            this.$router.push({ name: 'SearchProduct' });
+        }
+    },
+    data () {
+        return {
+            msg: '',
+            product: {}
+        };
     }
-  },
-  data () {
-    return {
-      msg: '',
-      product: {}
-    }
-  }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

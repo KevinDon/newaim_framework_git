@@ -1,7 +1,7 @@
 <div class="core-drawer">
   <el-drawer
     title="我是标题"
-    :visible.sync="state.isShow||false"
+    :visible.sync="!!getCompStoreState.isShow"
     :direction="'rtl'"
     :before-close="handleClose">
     <slot name="drawerMain"></slot>

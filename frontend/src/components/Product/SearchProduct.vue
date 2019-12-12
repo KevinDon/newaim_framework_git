@@ -90,269 +90,275 @@
 </template>
 
 <script>
-import ProductCard from '../Public/ProductCard'
-import ListCard from '../Public/ListCard'
+import ProductCard from '../Public/ProductCard';
+import ListCard from '../Public/ListCard';
 export default {
-  name: 'SearchProduct',
-  components: { ProductCard, ListCard },
-  created: function () {
-    let url = this.HOME + '/products/category'
-    let me = this
-    let producturl = this.HOME + '/products/search'
-    let pageParams = { limit: 40, page_no: 1 }
+    name: 'SearchProduct',
+    components: { ProductCard, ListCard },
+    created: function () {
+        let url = this.HOME + '/products/category';
+        let me = this;
+        let producturl = this.HOME + '/products/search';
+        let pageParams = { limit: 40, page_no: 1 };
 
-    // 循环生成category
-    let getchildren = function (data) {
-      for (let i = 0; i < data.length; i++) {
-        me.categorys.push({
-          category_id: data[i].category_id,
-          name: data[i].name,
-          parent_id: data[i].parent_id,
-          show: data[i].is_anchor === '1',
-          menu: data[i].include_in_menu,
-          children: data[i].children
-        })
+        // 循环生成category
+        let getchildren = function (data) {
+            for (let i = 0; i < data.length; i++) {
+                me.categorys.push({
+                    category_id: data[i].category_id,
+                    name: data[i].name,
+                    parent_id: data[i].parent_id,
+                    show: data[i].is_anchor === '1',
+                    menu: data[i].include_in_menu,
+                    children: data[i].children
+                });
 
-        if (data[i].children) {
-          getchildren(data[i].children)
+                if (data[i].children) {
+                    getchildren(data[i].children);
+                }
+            }
+        };
+
+        this.$store.dispatch('showloadingMask');
+        // 请求category
+        this.$http.get(url).then(function (response) {
+            if (response.data.status === true) {
+                getchildren(response.data.data, me);
+                me.categoryTree = me.categorys;
+                console.log(me.categorys);
+
+                // 请求产品列表
+                me.$http.get(producturl, { params: pageParams }).then(function (response) {
+                    if (response.status === 200) {
+                        console.log(666, response.data.data);
+                        // me.$store.dispatch('updateProductList', response.data.data)
+                        me.products = response.data.data.data;
+                        // me.total_count = response.data.data.total_count
+                        me.$store.dispatch('hideloadingMask');
+                    }
+                }).catch(function (error) {
+                    me.$store.dispatch('hideloadingMask');
+                    console.log(error);
+                });
+            }
+        });
+    },
+    methods: {
+        getNext: function (category) {
+            this.loading = true;
+            this.rootCategoty = category.category_id;
+            let me = this;
+            let producturl = this.HOME + '/products/search';
+            let pageParams = { limit: 10, page_no: 1, category_id: this.rootCategoty };
+
+            // 请求产品列表
+            me.$http.get(producturl, { params: pageParams }).then(function (response) {
+                if (response.status === 200) {
+                    me.loading = false;
+                    // me.products = response.data.data.data
+                    me.$store.dispatch('updateProductList', response.data.data.data);
+                    me.total_count = response.data.data.total_count;
+                }
+            }).catch(function (error) {
+                me.$store.dispatch('hideloadingMask');
+                console.log(error);
+            });
+        },
+        getPrev: function (category) {
+            this.loading = true;
+            let me = this;
+            let producturl = this.HOME + '/products/search';
+            let pageParams = { limit: 10, page_no: 1, category_id: me.rootCategoty };
+
+            for (let j = 0; j < this.categoryTree.length; j++) {
+                if (me.categoryTree[j].category_id === category.parent_id) {
+                    if (me.categoryTree[j].parent_id !== 2) {
+                        me.rootCategoty = me.categoryTree[j].parent_id;
+                    } else {
+                        pageParams.category_id = '';
+                        me.rootCategoty = 2;
+                    }
+                }
+            }
+
+            // 请求产品列表
+            this.$http.get(producturl, { params: pageParams }).then(function (response) {
+                console.log(response.data.data.data);
+                if (response.status === 200) {
+                    me.loading = false;
+                    // me.products = response.data.data.data
+                    me.$store.dispatch('updateProductList', response.data.data.data);
+                    me.total_count = response.data.data.total_count;
+                }
+            }).catch(function (error) {
+                me.$store.dispatch('hideloadingMask');
+                console.log(error);
+            });
+        },
+        selectAll: function () {
+            let me = this;
+            this.loading = true;
+            for (let j = 0; j < this.products.length; j++) {
+                if (me.products[j].is_import === 0) {
+                    me.products[j].imported = 1;
+                }
+            }
+            this.loading = false;
+            this.products = [...this.products];
+        },
+        unselectAll: function () {
+            let me = this;
+            this.loading = true;
+            for (let j = 0; j < this.products.length; j++) {
+                if (me.products[j].is_import === 0) {
+                    me.products[j].imported = 0;
+                }
+            }
+            this.loading = false;
+            this.products = [...this.products];
+        },
+        handleSizeChange: function (size) {
+            let me = this;
+            this.limit = size;
+            let producturl = this.HOME + '/products/search';
+            let pageParams = { limit: this.limit, page_no: this.page_no, category_id: this.rootCategoty };
+            if (this.rootCategoty === 2) {
+                pageParams.category_id = '';
+            }
+            // 请求产品列表
+            me.$store.dispatch('showloadingMask');
+            me.$http.get(producturl, { params: pageParams }).then(function (response) {
+                if (response.status === 200) {
+                    me.$store.dispatch('hideloadingMask');
+                    // me.products = response.data.data.data
+                    me.$store.dispatch('updateProductList', response.data.data.data);
+                    me.total_count = response.data.data.total_count;
+                    for (let i = 0; i < me.products.length; i++) {
+                        me.products[i].add = me.products[i].is_import !== 0;
+                    }
+                }
+            }).catch(function (error) {
+                me.$store.dispatch('hideloadingMask');
+                console.log(error);
+            });
+        },
+        importTolist: function (productid) {
+            let me = this;
+            for (let i = 0; i < me.products.length; i++) {
+                if (me.products[i].product_id === productid) {
+                    me.products[i].is_import = -1;
+                }
+            }
+            this.products = [...this.products];
+        },
+        removeFromlist: function (productid) {
+            let me = this;
+            for (let i = 0; i < me.products.length; i++) {
+                if (me.products[i].product_id === productid) {
+                    me.products[i].is_import = 0;
+                }
+            }
+            this.products = [...this.products];
+        },
+        importFun: function () {
+            let waitTingProduct = [];
+            let me = this;
+            for (let i = 0; i < me.products.length; i++) {
+                if (me.products[i].is_import === -1) {
+                    waitTingProduct.push(me.products[i]._id);
+                }
+            }
+
+            let waitingList = waitTingProduct.join(',');
+
+            let importurl = this.HOME + '/products/import/insert';
+            let producturl = this.HOME + '/products/search';
+            let pageParams = { limit: 40, page_no: 1 };
+
+            me.$http.post(importurl, { product_ids: waitingList }).then(function (response) {
+                if (response.status === 200) {
+                    me.$message.success(response.data.data);
+                    me.loading = true;
+
+                    me.$http.post(producturl, { params: pageParams }).then(function (response) {
+                        console.log(response);
+                        me.loading = false;
+                    }).catch(function (error) {
+                        me.loading = false;
+                        console.log(error);
+                    });
+                } else {
+                    me.$message.error(response.data.data);
+                }
+            }).catch(function (error) {
+                me.$store.dispatch('hideloadingMask');
+                console.log(error);
+            });
+        },
+        handleSortChange: function (value) {
+            console.log(value);
+            let me = this;
+            let producturl = this.HOME + '/products/search';
+            let pageParams = { limit: this.limit, page_no: this.page_no, category_id: this.rootCategoty };
+            if (this.rootCategoty === 2) {
+                pageParams.category_id = '';
+            }
+
+            if (value === 'Lower Price') {
+                pageParams.sort = 'price';
+            } else if (value === 'Higher Price') {
+                pageParams.sort = '-price';
+            }
+
+            me.$store.dispatch('showloadingMask');
+            me.$http.get(producturl, { params: pageParams }).then(function (response) {
+                me.$store.dispatch('hideloadingMask');
+                console.log(response);
+                // me.products = response.data.data.data
+                me.$store.dispatch('updateProductList', response.data.data.data);
+                me.total_count = response.data.data.total_count;
+            }).catch(function (error) {
+                me.$store.dispatch('hideloadingMask');
+                console.log(error);
+            });
+        },
+        changePage: function (pageno) {
+            this.page_no = pageno;
+            let url = this.HOME + '/products/search';
+            let me = this;
+            let pageParams = { limit: this.limit, page_no: this.page_no };
+
+            // 请求产品列表
+            me.$http.get(url, { params: pageParams }).then(function (response) {
+                if (response.status === 200) {
+                    // me.products = response.data.data.data
+                    me.$store.dispatch('updateProductList', response.data.data);
+                    me.total_count = response.data.data.total_count;
+                }
+            }).catch(function (error) {
+                console.log(error);
+            });
         }
-      }
+    },
+    data () {
+        return {
+            msg: '',
+            flagsrc: '../../static/Australia.jpg ',
+            categorys: [],
+            categoryTree: [],
+            sortValue: '',
+            sortArray: [{ label: '', value: '' },
+                { label: 'Lower Price', value: 'Lower Price' },
+                { label: 'Higher Price', value: 'Higher Price' }],
+            products: [],
+            rootCategoty: 2,
+            loading: false,
+            total_count: 0,
+            limit: 40,
+            page_no: 1
+        };
     }
-
-    this.$store.dispatch('showloadingMask')
-    // 请求category
-    this.$http.get(url).then(function (response) {
-      if (response.data.status === true) {
-        getchildren(response.data.data, me)
-        me.categoryTree = me.categorys
-        console.log(me.categorys)
-
-        // 请求产品列表
-        me.$http.get(producturl, {params: pageParams}).then(function (response) {
-          if (response.status === 200) {
-            console.log(666, response.data.data)
-            // me.$store.dispatch('updateProductList', response.data.data)
-            me.products = response.data.data.data
-            // me.total_count = response.data.data.total_count
-            me.$store.dispatch('hideloadingMask')
-          }
-        }).catch(function (error) {
-          me.$store.dispatch('hideloadingMask')
-          console.log(error)
-        })
-      }
-    })
-  },
-  methods: {
-    getNext: function (category) {
-      this.loading = true
-      this.rootCategoty = category.category_id
-      let me = this
-      let producturl = this.HOME + '/products/search'
-      let pageParams = { limit: 10, page_no: 1, category_id: this.rootCategoty }
-
-      // 请求产品列表
-      me.$http.get(producturl, {params: pageParams}).then(function (response) {
-        if (response.status === 200) {
-          me.loading = false
-          // me.products = response.data.data.data
-          me.$store.dispatch('updateProductList', response.data.data.data)
-          me.total_count = response.data.data.total_count
-        }
-      }).catch(function (error) {
-        me.$store.dispatch('hideloadingMask')
-        console.log(error)
-      })
-    },
-    getPrev: function (category) {
-      this.loading = true
-      let me = this
-      let producturl = this.HOME + '/products/search'
-      let pageParams = { limit: 10, page_no: 1, category_id: me.rootCategoty }
-
-      for (let j = 0; j < this.categoryTree.length; j++) {
-        if (me.categoryTree[j].category_id === category.parent_id) {
-          if (me.categoryTree[j].parent_id !== 2) {
-            me.rootCategoty = me.categoryTree[j].parent_id
-          } else {
-            pageParams.category_id = ''
-            me.rootCategoty = 2
-          }
-        }
-      }
-
-      // 请求产品列表
-      this.$http.get(producturl, {params: pageParams}).then(function (response) {
-        console.log(response.data.data.data)
-        if (response.status === 200) {
-          me.loading = false
-          // me.products = response.data.data.data
-          me.$store.dispatch('updateProductList', response.data.data.data)
-          me.total_count = response.data.data.total_count
-        }
-      }).catch(function (error) {
-        me.$store.dispatch('hideloadingMask')
-        console.log(error)
-      })
-    },
-    selectAll: function () {
-      let me = this
-      this.loading = true
-      for (let j = 0; j < this.products.length; j++) {
-        if (me.products[j].is_import === 0) { me.products[j].imported = 1 }
-      }
-      this.loading = false
-      this.products = [...this.products]
-    },
-    unselectAll: function () {
-      let me = this
-      this.loading = true
-      for (let j = 0; j < this.products.length; j++) {
-        if (me.products[j].is_import === 0) { me.products[j].imported = 0 }
-      }
-      this.loading = false
-      this.products = [...this.products]
-    },
-    handleSizeChange: function (size) {
-      let me = this
-      this.limit = size
-      let producturl = this.HOME + '/products/search'
-      let pageParams = { limit: this.limit, page_no: this.page_no, category_id: this.rootCategoty }
-      if (this.rootCategoty === 2) { pageParams.category_id = '' }
-      // 请求产品列表
-      me.$store.dispatch('showloadingMask')
-      me.$http.get(producturl, {params: pageParams}).then(function (response) {
-        if (response.status === 200) {
-          me.$store.dispatch('hideloadingMask')
-          // me.products = response.data.data.data
-          me.$store.dispatch('updateProductList', response.data.data.data)
-          me.total_count = response.data.data.total_count
-          for (let i = 0; i < me.products.length; i++) {
-            me.products[i].add = me.products[i].is_import !== 0
-          }
-        }
-      }).catch(function (error) {
-        me.$store.dispatch('hideloadingMask')
-        console.log(error)
-      })
-    },
-    importTolist: function (productid) {
-      let me = this
-      for (let i = 0; i < me.products.length; i++) {
-        if (me.products[i].product_id === productid) {
-          me.products[i].is_import = -1
-        }
-      }
-      this.products = [...this.products]
-    },
-    removeFromlist: function (productid) {
-      let me = this
-      for (let i = 0; i < me.products.length; i++) {
-        if (me.products[i].product_id === productid) {
-          me.products[i].is_import = 0
-        }
-      }
-      this.products = [...this.products]
-    },
-    importFun: function () {
-      let waitTingProduct = []
-      let me = this
-      for (let i = 0; i < me.products.length; i++) {
-        if (me.products[i].is_import === -1) {
-          waitTingProduct.push(me.products[i]._id)
-        }
-      }
-
-      let waitingList = waitTingProduct.join(',')
-
-      let importurl = this.HOME + '/products/import/insert'
-      let producturl = this.HOME + '/products/search'
-      let pageParams = { limit: 40, page_no: 1 }
-
-      me.$http.post(importurl, {product_ids: waitingList}).then(function (response) {
-        if (response.status === 200) {
-          me.$message.success(response.data.data)
-          me.loading = true
-
-          me.$http.post(producturl, {params: pageParams}).then(function (response) {
-            console.log(response)
-            me.loading = false
-          }).catch(function (error) {
-            me.loading = false
-            console.log(error)
-          })
-        } else {
-          me.$message.error(response.data.data)
-        }
-      }).catch(function (error) {
-        me.$store.dispatch('hideloadingMask')
-        console.log(error)
-      })
-    },
-    handleSortChange: function (value) {
-      console.log(value)
-      let me = this
-      let producturl = this.HOME + '/products/search'
-      let pageParams = { limit: this.limit, page_no: this.page_no, category_id: this.rootCategoty }
-      if (this.rootCategoty === 2) { pageParams.category_id = '' }
-
-      if (value === 'Lower Price') {
-        pageParams.sort = 'price'
-      } else if (value === 'Higher Price') {
-        pageParams.sort = '-price'
-      }
-
-      me.$store.dispatch('showloadingMask')
-      me.$http.get(producturl, {params: pageParams}).then(function (response) {
-        me.$store.dispatch('hideloadingMask')
-        console.log(response)
-        // me.products = response.data.data.data
-        me.$store.dispatch('updateProductList', response.data.data.data)
-        me.total_count = response.data.data.total_count
-      }).catch(function (error) {
-        me.$store.dispatch('hideloadingMask')
-        console.log(error)
-      })
-    },
-    changePage: function (pageno) {
-      this.page_no = pageno
-      let url = this.HOME + '/products/search'
-      let me = this
-      let pageParams = { limit: this.limit, page_no: this.page_no }
-
-      // 请求产品列表
-      me.$http.get(url, {params: pageParams}).then(function (response) {
-        if (response.status === 200) {
-          // me.products = response.data.data.data
-          me.$store.dispatch('updateProductList', response.data.data)
-          me.total_count = response.data.data.total_count
-        }
-      }).catch(function (error) {
-        console.log(error)
-      })
-    }
-  },
-  data () {
-    return {
-      msg: '',
-      flagsrc: '../../static/Australia.jpg ',
-      categorys: [],
-      categoryTree: [],
-      sortValue: '',
-      sortArray: [
-        {label: '', value: ''},
-        {label: 'Lower Price', value: 'Lower Price'},
-        {label: 'Higher Price', value: 'Higher Price'}
-      ],
-      products: [],
-      rootCategoty: 2,
-      loading: false,
-      total_count: 0,
-      limit: 40,
-      page_no: 1
-    }
-  }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
