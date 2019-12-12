@@ -1,7 +1,8 @@
 <template>
-  <el-form-item :label="label">
-    <el-input v-model="val"></el-input>
-  </el-form-item>
+    <!--  输入框 -->
+    <el-form-item :label="item.header">
+        <el-input v-model="val" :placeholder="item.placeholder" :style="{width: item.width}"></el-input>
+    </el-form-item>
 </template>
 
 <script>
@@ -13,6 +14,15 @@ export default {
         },
         value: {
             type: String
+        },
+        item : {
+            type: Object,
+            default: () => {
+                return {
+                    placeholder: '',
+                    width: 200
+                };
+            }
         }
     },
     data() {

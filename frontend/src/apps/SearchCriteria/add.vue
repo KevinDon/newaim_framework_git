@@ -35,7 +35,7 @@ export default {
             formConf: {},
             formField: [{ header: 'ComboSearchID', xtype: 'displayfield' },
                 { header: 'ComboSearchName', xtype: 'textfield' },
-                { header: 'Active', xtype: 'combo' }]
+                { header: 'Active', xtype: 'combo' , store: [{ title: '启动', value: 1 },{ title: '禁用', value: 2 }] }]
         };
     }
 };

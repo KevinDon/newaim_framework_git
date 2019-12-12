@@ -1,7 +1,10 @@
 export default {
     name: 'form.vue',
     components: {
-        textfield: () => import('@/core/components/form/widget/textfield.vue')
+        //输入框
+        textfield: () => import('@/core/components/form/widget/textfield.vue'),
+        //下拉框
+        combofield: () => import('@/core/components/form/widget/combofield.vue')
     },
     props: {
         formData: {
@@ -20,13 +23,13 @@ export default {
         };
     },
     created() {
-        let vm = this;
+        let me = this;
 
-        console.log('from组件传参', vm.$props);
+        console.log('from组件传参', me.$props);
         //  根据 formField 初始化 字段值容器
         debugger;
-        vm.formField.forEach(item => {
-            vm.$set(this.innerData, item['header'], '');
+        me.formField.forEach(item => {
+            me.$set(this.innerData, item['header'], '');
         });
     },
     watch: {
